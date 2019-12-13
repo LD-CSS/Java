@@ -7,23 +7,85 @@
  */
 
 plugins {
-    // Apply the java-library plugin to add support for Java Library
-    id 'java-library'
+   	id 'java'
+	id 'eclipse' // optional (to generate Eclipse project files)
+	id 'application'
+  	id 'org.openjfx.javafxplugin' version '0.0.8'
 }
+
+//mainClassName = 'fr.library.Main'
 
 repositories {
     // Use jcenter for resolving your dependencies.
     // You can declare any Maven/Ivy/file repository here.
+    mavenCentral()
     jcenter()
 }
 
+javafx {
+    version = "11.0.2"
+    modules = ['javafx.base', 'javafx.controls', 'javafx.fxml', 'javafx.swing','javafx.graphics'] 
+    /* -ea --module-path /Users/gonr1001/Documents/javafx-sdk-11.0.2/lib --add-modules=javafx.controls,javafx.fxml,javafx.swing,javafx.graphics*/   
+}
+
 dependencies {
-    // This dependency is exported to consumers, that is to say found on their compile classpath.
-    api 'org.apache.commons:commons-math3:3.6.1'
+   // TestFX
+	testCompile(group: "org.testfx", name: "testfx-junit5", version: "4.0.16-alpha")
+	testCompile(group: "org.testfx", name: "testfx-core", version: "4.0.16-alpha") //depends de testfx-junit5
+	testCompile('org.testfx:testfx-core:4.0.16-alpha') {
+    	exclude group: 'org.testfx', module: 'testfx-internal-java8'
+	}
+    testCompile(group: 'org.testfx', name: 'openjfx-monocle', version: 'jdk-11+26')
+    
+	// JUnit
+	testCompile(group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: '5.5.2')
+	testCompile(group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: '5.5.2')
+	testCompile 'junit:junit:4.12'
+	
+	compile group: 'mysql', name: 'mysql-connector-java', version: '8.0.18'
+}
 
-    // This dependency is used internally, and not exposed to consumers on their own compile classpath.
-    implementation 'com.google.guava:guava:27.0.1-jre'
+test {
+	useJUnitPlatform()
+	
+	testLogging {
+		events "passed", "skipped", "failed"
+	}
+	
+	// set heap size for the test JVM(s)
+  	//maxHeapSize = "1576m"
+}
 
-    // Use JUnit test framework
-    testImplementation 'junit:junit:4.12'
+sourceSets {
+	main {
+		java {
+			srcDirs= ["src/main/java"]
+		}
+		resources {
+			srcDirs= ["src/main/resources"]
+		}
+	}
+	test {
+		java {
+			srcDirs= ["src/test/java"]
+		}
+		resources {
+			srcDirs= ["src/test/resources"]
+		}
+	}
+}
+
+task copyDependencies(type: Copy) {
+   from configurations.testCompile
+   into './lib'
+   doLast {
+   		println 'Export of dependencies to lib folder done !'
+   }
+}
+
+// Allow to clean the destination directory to avoid testing all tests
+[compileJava,compileTestJava].each { task ->
+  task.doFirst {
+     delete task.destinationDir
+  }
 }
