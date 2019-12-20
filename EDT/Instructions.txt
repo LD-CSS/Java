@@ -1,0 +1,9 @@
+Pour pouvoir lancer l'application il faut faire comme ça la première fois :
+1 - Clic droit sur Main.java
+2 - Run as > Java Application
+3 - Ca affiche une erreur, c'est normal
+4 - Clic droit sur Main.java
+5 - Run as > Run Configurations...
+6 - Onglet "Arguments"
+7 - Dans la zone de texte "VM Arguments" écrire ça (faut modifier le chemin) :
+	-ea --module-path cheminVersLeDossierJavaFX\lib --add-modules=javafx.controls,javafx.fxml,javafx.swing,javafx.graphics,javafx.base
