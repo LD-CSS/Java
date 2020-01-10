@@ -11,6 +11,7 @@ import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
+import javafx.scene.text.TextAlignment;
 
 public class EDTAreaController {
 
@@ -47,6 +48,7 @@ public class EDTAreaController {
 			Integer rowIndex = GridPane.getRowIndex(clickedNode);
 			if (colIndex != null && rowIndex != null) {
 				System.out.printf("Clic sur la cellule [%d, %d]%n", colIndex.intValue(), rowIndex.intValue());
+				System.out.println(((Label)clickedNode).getText());
 			}
 		}
 	}
@@ -60,10 +62,11 @@ public class EDTAreaController {
 	public void afficherCoursDansCase(int ligne, int colonne, String label, Color couleur, int span) {
 		Label infoAAfficher = new Label(label);
 		infoAAfficher.setMaxSize(this.grille.getWidth() / this.grille.getColumnCount(),
-				span * this.grille.getHeight() / this.grille.getRowCount());
+				span * this.grille.getHeight() / (this.grille.getRowCount()-1) + 30);
 		infoAAfficher.setBackground(new Background(new BackgroundFill(couleur, null, null)));
 		infoAAfficher.setAlignment(Pos.CENTER);
-		GridPane.setMargin(infoAAfficher, new Insets(0.5));
+		infoAAfficher.setTextAlignment(TextAlignment.CENTER);
+		GridPane.setMargin(infoAAfficher, new Insets(0.9, 0.9, 0, 0.9));
 		GridPane.setConstraints(infoAAfficher, colonne, ligne);
 		GridPane.setRowSpan(infoAAfficher, span);
 		this.grille.add(infoAAfficher, colonne, ligne);

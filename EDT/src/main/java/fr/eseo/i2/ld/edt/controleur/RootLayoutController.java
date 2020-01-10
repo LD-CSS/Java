@@ -8,7 +8,7 @@ public class RootLayoutController {
 
 	// Déclaration des composants de la fenêtre
 	@FXML
-	private Button boutonExemple;
+	private Button boutonAjoutCours;
 
 	// Référence à l'application principale
 	private Main main;
@@ -23,15 +23,9 @@ public class RootLayoutController {
 	}
 
 	@FXML
-	private void handleExemple() {
-		System.out.println("Appui sur le bouton exemple détecté !");
-		//this.main.edtAreaController.afficherCoursDansCase(1, 1, "Maths", Color.PINK, 2);
-		this.main.edtAreaController.afficherTousLesCours("Maths");
-	}
-	
-	@FXML
-	private void handleClear() {
-		System.out.println("Appui sur le menu Supprimer détecté !");
-		this.main.edtAreaController.viderCours();
+	private void handleAjoutCours() {
+		System.out.println("Ajout d'un cours");
+		//this.main.edtAreaController.afficherCoursDansCase(1, 1, "Maths\nM. Glière\nA402 - Truc", Color.PINK, 1);
+		this.main.edtAreaController.afficherTousLesCours("Maths\nM. Glière\nA402 - Truc");
 	}
 }
