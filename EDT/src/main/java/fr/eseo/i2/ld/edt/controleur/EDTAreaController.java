@@ -24,7 +24,7 @@ public class EDTAreaController {
 	public void setMain(Main main) {
 		this.main = main;
 	}
-	
+
 	public Main getMain() {
 		return this.main;
 	}
@@ -40,12 +40,14 @@ public class EDTAreaController {
 		if (clickedNode != this.grille) {
 			Node parent = clickedNode.getParent();
 			while (parent != this.grille) {
-		        clickedNode = parent;
-		        parent = clickedNode.getParent();
-		    }
+				clickedNode = parent;
+				parent = clickedNode.getParent();
+			}
 			Integer colIndex = GridPane.getColumnIndex(clickedNode);
 			Integer rowIndex = GridPane.getRowIndex(clickedNode);
-			System.out.printf("Click on cell [%d, %d]%n", colIndex.intValue(), rowIndex.intValue());
+			if (colIndex != null && rowIndex != null) {
+				System.out.printf("Clic sur la cellule [%d, %d]%n", colIndex.intValue(), rowIndex.intValue());
+			}
 		}
 	}
 
@@ -65,7 +67,7 @@ public class EDTAreaController {
 		GridPane.setConstraints(infoAAfficher, colonne, ligne);
 		GridPane.setRowSpan(infoAAfficher, span);
 		this.grille.add(infoAAfficher, colonne, ligne);
-		
+
 		// Effet lorsqu'on passe dessus avec la souris
 		infoAAfficher.setOnMouseEntered((MouseEvent t) -> {
 			infoAAfficher.setStyle("-fx-background-color:#FFFF00;");
