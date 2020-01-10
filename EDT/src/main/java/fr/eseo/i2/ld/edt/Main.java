@@ -22,7 +22,7 @@ public class Main extends Application {
 
 	// Controleurs
 	private RootLayoutController rootLayoutController;
-	private EDTAreaController edtAreaController;
+	public EDTAreaController edtAreaController;
 
 	public static void main(String[] args) {
 		launch();

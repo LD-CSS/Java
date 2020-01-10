@@ -9,7 +9,7 @@
 
 <AnchorPane xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fr.eseo.i2.ld.edt.controleur.EDTAreaController">
    <children>
-      <GridPane fx:id="grille" gridLinesVisible="true">
+      <GridPane fx:id="grille" gridLinesVisible="true" onMouseClicked="#handleClick">
         <columnConstraints>
             <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
           <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />

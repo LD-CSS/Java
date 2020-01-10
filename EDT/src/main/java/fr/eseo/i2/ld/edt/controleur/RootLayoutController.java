@@ -25,5 +25,13 @@ public class RootLayoutController {
 	@FXML
 	private void handleExemple() {
 		System.out.println("Appui sur le bouton exemple détecté !");
+		//this.main.edtAreaController.afficherCoursDansCase(1, 1, "Maths", Color.PINK, 2);
+		this.main.edtAreaController.afficherTousLesCours("Maths");
+	}
+	
+	@FXML
+	private void handleClear() {
+		System.out.println("Appui sur le menu Supprimer détecté !");
+		this.main.edtAreaController.viderCours();
 	}
 }
