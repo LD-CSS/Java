@@ -1,5 +1,32 @@
 package fr.eseo.i2.ld.edt.modele;
 
-public class Matiere {
+import java.awt.Color;
 
+public class Matiere {
+	private String nomMatiere;
+	private Color couleur;
+	
+
+	public Matiere(String nomMatiere, Color couleur) {
+		super();
+		this.setNomMatiere(nomMatiere);
+		this.setCouleur(couleur);
+	}
+
+	public String getNomMatiere() {
+		return nomMatiere;
+	}
+
+	public void setNomMatiere(String nomMatiere) {
+		this.nomMatiere = nomMatiere;
+	}
+
+	public Color getCouleur() {
+		return couleur;
+	}
+
+	public void setCouleur(Color couleur) {
+		this.couleur = couleur;
+	}
+	
 }
