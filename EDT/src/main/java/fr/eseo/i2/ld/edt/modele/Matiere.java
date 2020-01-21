@@ -5,6 +5,10 @@ import java.awt.Color;
 public class Matiere {
 	private String nomMatiere;
 	private Color couleur;
+	private Professeur prof;
+	private Classe classe;
+	private String heureDebut;
+	private String heureFin;
 	
 
 	public Matiere(String nomMatiere, Color couleur) {
