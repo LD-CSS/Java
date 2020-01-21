@@ -1,6 +1,7 @@
 package fr.eseo.i2.ld.edt.controleur;
 
 import fr.eseo.i2.ld.edt.Main;
+import fr.eseo.i2.ld.edt.modele.Matiere;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -81,12 +82,12 @@ public class EDTAreaController {
 							(int) (couleur.getGreen() * 255), (int) (couleur.getBlue() * 255)) + ";");
 		});
 	}
-
-	public void afficherTousLesCours(String label) {
-		for (int i = 1; i < this.grille.getRowCount(); i++) {
-			for (int j = 1; j < this.grille.getColumnCount(); j++) {
-				afficherCoursDansCase(i, j, label, Color.PINK, 1);
-			}
+	
+	public void afficherCours() {
+		for(Matiere m : this.getMain().getMatieres()) {
+			int i = Matiere.getHeure(m.getHeureDebut())-7;
+			int j = m.getJour();
+			afficherCoursDansCase(i, j, m.toString(), m.getCouleur(), Matiere.getHeure(m.getHeureFin())-Matiere.getHeure(m.getHeureDebut()));
 		}
 	}
 }

@@ -26,6 +26,7 @@ public class RootLayoutController {
 	private void handleAjoutCours() {
 		System.out.println("Ajout d'un cours");
 		//this.main.edtAreaController.afficherCoursDansCase(1, 1, "Maths\nM. Glière\nA402 - Truc", Color.PINK, 1);
-		this.main.edtAreaController.afficherTousLesCours("Maths\nM. Glière\nA402 - Truc");
+		//this.main.edtAreaController.afficherTousLesCours("Maths\nM. Glière\nA402 - Truc");
+		this.main.edtAreaController.afficherCours();
 	}
 }

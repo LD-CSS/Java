@@ -13,7 +13,7 @@ public class Classe {
 		return nomClasse;
 	}
 
-	public void setNomClasse(String nomClasse) {
+	private void setNomClasse(String nomClasse) {
 		this.nomClasse = nomClasse;
 	}
 
@@ -21,8 +21,7 @@ public class Classe {
 		return idClasse;
 	}
 
-	public void setIdClasse(String idClasse) {
+	private void setIdClasse(String idClasse) {
 		this.idClasse = idClasse;
 	}
-	
 }
