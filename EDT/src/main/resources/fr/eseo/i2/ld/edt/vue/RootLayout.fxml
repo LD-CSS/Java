@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.ToolBar?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
@@ -12,6 +15,15 @@
             <ToolBar layoutY="25.0" prefHeight="40.0" prefWidth="200.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
               <items>
                 <Button fx:id="boutonAjoutCours" mnemonicParsing="false" onAction="#handleAjoutCours" text="Ajouter cours" />
+                  <Separator orientation="VERTICAL" />
+                  <Button fx:id="boutonSemaineAvant" mnemonicParsing="false" onAction="#handleSemaineAvant" text="&lt;" />
+                  <Button fx:id="boutonToday" contentDisplay="CENTER" mnemonicParsing="false" onAction="#handleToday" text="Aujourd'hui" />
+                  <Button fx:id="boutonSemaineApres" contentDisplay="CENTER" mnemonicParsing="false" onAction="#handleSemaineApres" text="&gt;" />
+                  <Separator orientation="VERTICAL" />
+                  <Label fx:id="info" text="Semaine du au" />
+                  <Separator orientation="VERTICAL" />
+                  <ChoiceBox fx:id="classes" prefWidth="80.0" />
+                  <Button mnemonicParsing="false" onAction="#handleChangeClasse" text="Ok" />
               </items>
             </ToolBar>
          </children>

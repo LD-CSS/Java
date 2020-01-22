@@ -140,9 +140,10 @@ public class CreationCoursController {
 			Statement stmt = con.createStatement();
 			// Requête prof
 			stmt.execute(
-					"INSERT INTO \"COURS\" (salle, horaire_debut, horaire_fin, date, \"Matiere_matiereID\", \"Prof_profID\") VALUES ('"
+					"INSERT INTO \"COURS\" (salle, horaire_debut, horaire_fin, date, classe, \"Matiere_matiereID\", \"Prof_profID\") VALUES ('"
 							+ cours.getSalle() + "', '" + cours.getHeureDebut() + "', '" + cours.getHeureFin() + "', '"
-							+ cours.getDate() + "', " + matiere.getId() + ", " + prof.getId() + ")");
+							+ cours.getDate() + "', '" + cours.getClasse() + "', " + matiere.getId() + ", "
+							+ prof.getId() + ")");
 			stmt.close();
 			con.close();
 		} catch (Exception e) {

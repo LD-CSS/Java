@@ -7,6 +7,7 @@ import java.util.List;
 import fr.eseo.i2.ld.edt.controleur.CreationCoursController;
 import fr.eseo.i2.ld.edt.controleur.EDTAreaController;
 import fr.eseo.i2.ld.edt.controleur.RootLayoutController;
+import fr.eseo.i2.ld.edt.modele.Classe;
 import fr.eseo.i2.ld.edt.modele.Cours;
 import javafx.animation.PauseTransition;
 import javafx.application.Application;
@@ -27,15 +28,25 @@ public class Main extends Application {
 	private Stage premierStage;
 	private BorderPane rootLayout;
 	private List<Cours> listeCours;
+	public int decalageSemaine = 0;
+	private Classe classeActuelle;
 
 	// Controleurs
-	private RootLayoutController rootLayoutController;
+	public RootLayoutController rootLayoutController;
 	public EDTAreaController edtAreaController;
 	public CreationCoursController creationCoursController;
 
 	// Accesseurs
 	public List<Cours> getCours() {
 		return this.listeCours;
+	}
+	
+	public Classe getClasseActuelle() {
+		return this.classeActuelle;
+	}
+	
+	public void setClasseActuelle(Classe classe) {
+		this.classeActuelle = classe;
 	}
 
 	public static void main(String[] args) {
@@ -53,7 +64,13 @@ public class Main extends Application {
 		initRootLayout();
 		initEDTArea();
 
-		PauseTransition wait = new PauseTransition(Duration.seconds(2));
+		PauseTransition wait = new PauseTransition(Duration.seconds(1));
+		wait.setOnFinished((e) -> {
+			this.setClasseActuelle(this.rootLayoutController.getClasse());
+		});
+		wait.play();
+		
+		wait = new PauseTransition(Duration.seconds(1));
 		wait.setOnFinished((e) -> {
 			this.edtAreaController.afficherCours();
 		});

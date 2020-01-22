@@ -106,7 +106,17 @@ public class EDTAreaController {
 	}
 
 	public void viderCours() {
-		for (int k = 1; k < this.getMain().getCours().size(); k++) {
+		LocalDate today = LocalDate.now();
+		int jour = today.getDayOfWeek().getValue();
+		LocalDate dimancheAvant = today.minusDays(jour - 7 * this.getMain().decalageSemaine);
+		int nbCoursASupprimer = 0;
+		for (Cours c : this.getMain().getCours()) {
+			if (c.getClasse().getIdClasse().equals(this.getMain().getClasseActuelle().getIdClasse())
+					&& c.getDate().isAfter(dimancheAvant) && c.getDate().isBefore(dimancheAvant.plusDays(7))) {
+				nbCoursASupprimer++;
+			}
+		}
+		for (int k = 0; k < nbCoursASupprimer; k++) {
 			this.grille.getChildren().remove(this.grille.getChildren().size() - 1);
 		}
 	}
@@ -135,11 +145,22 @@ public class EDTAreaController {
 	}
 
 	public void afficherCours() {
+		LocalDate today = LocalDate.now();
+		int jour = today.getDayOfWeek().getValue();
+		LocalDate dimancheAvant = today.minusDays(jour - 7 * this.getMain().decalageSemaine);
+		this.getMain().rootLayoutController
+				.setText("Semaine du " + String.format("%02d", dimancheAvant.plusDays(1).getDayOfMonth()) + "/"
+						+ String.format("%02d", dimancheAvant.plusDays(1).getMonthValue()) + " au "
+						+ String.format("%02d", dimancheAvant.plusDays(7).getDayOfMonth()) + "/"
+						+ String.format("%02d", dimancheAvant.plusDays(7).getMonthValue()));
 		for (Cours m : this.getMain().getCours()) {
 			int i = Cours.getHeure(m.getHeureDebut()) - 7;
 			int j = Cours.getJour(m.getDate());
-			afficherCoursDansCase(i, j, m.toString(), m.getCouleur(),
-					Cours.getHeure(m.getHeureFin()) - Cours.getHeure(m.getHeureDebut()));
+			if (m.getClasse().getIdClasse().equals(this.getMain().getClasseActuelle().getIdClasse())
+					&& m.getDate().isAfter(dimancheAvant) && m.getDate().isBefore(dimancheAvant.plusDays(7))) {
+				afficherCoursDansCase(i, j, m.toString(), m.getCouleur(),
+						Cours.getHeure(m.getHeureFin()) - Cours.getHeure(m.getHeureDebut()));
+			}
 		}
 	}
 }
