@@ -24,4 +24,8 @@ public class Classe {
 	private void setIdClasse(String idClasse) {
 		this.idClasse = idClasse;
 	}
+	
+	public String toString() {
+		return this.getNomClasse();
+	}
 }

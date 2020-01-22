@@ -4,17 +4,16 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import fr.eseo.i2.ld.edt.controleur.CreationCoursController;
 import fr.eseo.i2.ld.edt.controleur.EDTAreaController;
 import fr.eseo.i2.ld.edt.controleur.RootLayoutController;
-import fr.eseo.i2.ld.edt.modele.Classe;
-import fr.eseo.i2.ld.edt.modele.Matiere;
-import fr.eseo.i2.ld.edt.modele.Professeur;
+import fr.eseo.i2.ld.edt.modele.Cours;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.paint.Color;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 public class Main extends Application {
@@ -25,25 +24,18 @@ public class Main extends Application {
 	// Déclaration des variables
 	private Stage premierStage;
 	private BorderPane rootLayout;
-	private List<Matiere> listeMatieres;
+	private List<Cours> listeCours;
 
 	// Controleurs
 	private RootLayoutController rootLayoutController;
 	public EDTAreaController edtAreaController;
+	public CreationCoursController creationCoursController;
 
 	// Accesseurs
-	public List<Matiere> getMatieres() {
-		return this.listeMatieres;
+	public List<Cours> getCours() {
+		return this.listeCours;
 	}
-
-	private void remplissageTest() {
-		Classe p1c = new Classe("P1C", "P1C");
-		Professeur prof1 = new Professeur("André", "Glière");
-		Professeur prof2 = new Professeur("Michel", "Legrand");
-		this.getMatieres().add(new Matiere("Maths", prof1, Color.PINK, 1, "8h00", "9h00", p1c));
-		this.getMatieres().add(new Matiere("Physique", prof2, Color.LIGHTBLUE, 3, "9h00", "12h00", p1c));
-	}
-
+	
 	public static void main(String[] args) {
 		launch();
 	}
@@ -54,12 +46,10 @@ public class Main extends Application {
 		this.premierStage = primaryStage;
 		this.premierStage.setTitle("Emploi du temps");
 
-		this.listeMatieres = new ArrayList<>();
+		this.listeCours = new ArrayList<>();
 
 		initRootLayout();
 		initEDTArea();
-
-		this.remplissageTest();
 	}
 
 	public void initRootLayout() {
@@ -84,17 +74,44 @@ public class Main extends Application {
 
 	public void initEDTArea() {
 		try {
-			// Load the draw area.
-			FXMLLoader loaderDrawArea = new FXMLLoader(getClass().getResource(cheminVersVues + "EDTArea.fxml"));
-			AnchorPane drawArea = (AnchorPane) loaderDrawArea.load();
+			FXMLLoader loaderEDTArea = new FXMLLoader(getClass().getResource(cheminVersVues + "EDTArea.fxml"));
+			AnchorPane drawArea = (AnchorPane) loaderEDTArea.load();
 
 			// Give the controller access to the main class
-			this.edtAreaController = loaderDrawArea.getController();
+			this.edtAreaController = loaderEDTArea.getController();
 			this.edtAreaController.setMain(this);
 
 			// Set the draw area into the center of root layout.
 			rootLayout.setCenter(drawArea);
 
+		} catch (IOException e) {
+			System.out.println("Zut");
+		}
+	}
+	
+	public void initCreationCours() {
+		try {
+			// Load the fxml file and create a new stage for the popup dialog.
+			FXMLLoader loaderInformation = new FXMLLoader(getClass().getResource(cheminVersVues + "CreationCours.fxml"));
+			AnchorPane page = (AnchorPane) loaderInformation.load();
+
+			// Create the dialog Stage.
+			Stage dialogStageInfo = new Stage();
+			dialogStageInfo.setTitle("Information");
+			dialogStageInfo.initModality(Modality.WINDOW_MODAL);
+			dialogStageInfo.initOwner(this.premierStage);
+
+			Scene sceneInfo = new Scene(page);
+			dialogStageInfo.setScene(sceneInfo);
+
+			// Give the controller access to the main class
+			this.creationCoursController = loaderInformation.getController();
+			this.creationCoursController.setMain(this);
+			this.creationCoursController.setStage(dialogStageInfo);
+			this.creationCoursController.initFenetre();
+
+			// Show the dialog and wait until the user closes it
+			dialogStageInfo.showAndWait();
 		} catch (IOException e) {
 			System.out.println("Zut");
 		}

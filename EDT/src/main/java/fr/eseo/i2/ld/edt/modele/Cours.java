@@ -1,33 +1,42 @@
 package fr.eseo.i2.ld.edt.modele;
 
+import java.time.LocalDate;
+
 import javafx.scene.paint.Color;
 
-public class Matiere {
-	private String nomMatiere;
+public class Cours {
+	
+	private static int nbCours = 0;
+	
+	private String nomCours;
 	private Color couleur;
 	private Professeur prof;
 	private Classe classe;
 	private String heureDebut;
 	private String heureFin;
-	private int jour;
+	private LocalDate date;
+	private String salle;
+	private int idCours;
 
-	public Matiere(String nomMatiere, Professeur prof, Color couleur, int jour, String heureDebut, String heureFin,
-			Classe classe) {
-		this.setNomMatiere(nomMatiere);
+	public Cours(String nomCours, Professeur prof, Color couleur, LocalDate date, String heureDebut, String heureFin,
+			Classe classe, String salle) {
+		this.setNomMatiere(nomCours);
 		this.setCouleur(couleur);
 		this.setHeureDebut(heureDebut);
 		this.setHeureFin(heureFin);
 		this.setProf(prof);
 		this.setClasse(classe);
-		this.setJour(jour);
+		this.setDate(date);
+		this.setSalle(salle);
+		this.setIdCours(nbCours++);
 	}
 
-	public String getNomMatiere() {
-		return nomMatiere;
+	public String getNomCours() {
+		return nomCours;
 	}
 
-	private void setNomMatiere(String nomMatiere) {
-		this.nomMatiere = nomMatiere;
+	private void setNomMatiere(String nomCours) {
+		this.nomCours = nomCours;
 	}
 
 	public Color getCouleur() {
@@ -70,16 +79,32 @@ public class Matiere {
 		this.heureFin = heureFin;
 	}
 
-	public int getJour() {
-		return jour;
+	public LocalDate getDate() {
+		return this.date;
 	}
 
-	private void setJour(int jour) {
-		this.jour = jour;
+	private void setDate(LocalDate date) {
+		this.date = date;
+	}
+
+	private void setSalle(String salle) {
+		this.salle = salle;
+	}
+
+	public String getSalle() {
+		return this.salle;
+	}
+	
+	private void setIdCours(int idCours) {
+		this.idCours = idCours;
+	}
+	
+	public int getIdCours() {
+		return this.idCours;
 	}
 
 	public String toString() {
-		return this.getNomMatiere() + "\n" + this.getProf();
+		return this.getNomCours() + "\n" + this.getProf() + "\n" + this.getSalle();
 	}
 
 	public static int getHeure(String heure) {
@@ -88,5 +113,9 @@ public class Matiere {
 
 	public static int getMin(String heure) {
 		return Integer.parseInt(heure.split("h")[1]);
+	}
+
+	public static int getJour(LocalDate date) {
+		return date.getDayOfWeek().getValue();
 	}
 }
