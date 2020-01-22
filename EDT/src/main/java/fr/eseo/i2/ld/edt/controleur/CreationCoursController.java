@@ -11,6 +11,7 @@ import java.util.List;
 import fr.eseo.i2.ld.edt.Main;
 import fr.eseo.i2.ld.edt.modele.Classe;
 import fr.eseo.i2.ld.edt.modele.Cours;
+import fr.eseo.i2.ld.edt.modele.Matiere;
 import fr.eseo.i2.ld.edt.modele.Professeur;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
@@ -40,10 +41,14 @@ public class CreationCoursController {
 	private Slider choixHeureFin;
 
 	@FXML
-	private ChoiceBox<String> choixMatiere;
+	private ChoiceBox<Matiere> choixMatiere;
 
 	@FXML
 	private TextField choixSalle;
+
+	private List<Professeur> listeProf;
+	private List<Classe> listeClasses;
+	private List<Matiere> listeMatieres;
 
 	// Référence à l'application principale
 	private Main main;
@@ -62,9 +67,9 @@ public class CreationCoursController {
 	}
 
 	public void initFenetre() {
-		List<Professeur> listeProf = new ArrayList<>();
-		List<String> listeCours = new ArrayList<>();
-		List<Classe> listeClasses = new ArrayList<>();
+		this.listeProf = new ArrayList<>();
+		this.listeClasses = new ArrayList<>();
+		this.listeMatieres = new ArrayList<>();
 		try {
 			// Connexion bdd
 			Class.forName("org.postgresql.Driver");
@@ -72,18 +77,23 @@ public class CreationCoursController {
 					"network");
 			// Requête SQL
 			Statement stmt = con.createStatement();
+
 			// Requête prof
-			ResultSet rs = stmt.executeQuery("SELECT (prenom,nom) FROM \"PROF\"");
+			ResultSet rs = stmt.executeQuery("SELECT (prenom,nom,\"ProfID\") FROM \"PROF\"");
 			while (rs.next()) {
 				String prof = rs.getString(1).replace("(", "").replace(")", "");
-				listeProf.add(new Professeur(prof.split(",")[0], prof.split(",")[1]));
+				listeProf.add(
+						new Professeur(prof.split(",")[0], prof.split(",")[1], Integer.valueOf(prof.split(",")[2])));
 			}
 
 			// Requête matières
-			rs = stmt.executeQuery("SELECT nom FROM \"MATIERE\"");
+			rs = stmt.executeQuery("SELECT (nom,couleur,\"MatiereID\") FROM \"MATIERE\"");
 			while (rs.next()) {
-				String matiere = rs.getString(1).replace("(", "").replace(")", "");
-				listeCours.add(matiere);
+				String texte = rs.getString(1).replace("(", "").replace(")", "");
+				String nom = texte.split(",")[0];
+				Color couleur = Color.valueOf(texte.split(",")[1]);
+				int id = Integer.valueOf(texte.split(",")[2]);
+				this.listeMatieres.add(new Matiere(nom, couleur, id));
 			}
 
 			// Requête classes
@@ -99,26 +109,22 @@ public class CreationCoursController {
 			System.out.println("Problème de connexion à la BDD");
 			System.out.println(e.getMessage());
 		}
-		this.choixProf.setItems(FXCollections.observableArrayList(listeProf));
-		this.choixMatiere.setItems(FXCollections.observableArrayList(listeCours));
-		this.choixClasse.setItems(FXCollections.observableArrayList(listeClasses));
-	}
-
-	@FXML
-	private void initialize() {
-		System.out.println("Pouet, ça a marché");
+		this.choixProf.setItems(FXCollections.observableArrayList(this.listeProf));
+		this.choixMatiere.setItems(FXCollections.observableArrayList(this.listeMatieres));
+		this.choixClasse.setItems(FXCollections.observableArrayList(this.listeClasses));
 	}
 
 	@FXML
 	private void handleOK() {
 		Professeur prof = this.choixProf.getValue();
 		Classe classe = this.choixClasse.getValue();
-		String matiere = this.choixMatiere.getValue();
+		Matiere matiere = this.choixMatiere.getValue();
 		LocalDate date = this.choixDate.getValue();
 		int heureDebut = (int) this.choixHeureDebut.getValue();
 		int heureFin = (int) this.choixHeureFin.getValue();
 		String salle = this.choixSalle.getText();
-		Cours cours = new Cours(matiere, prof, Color.PINK, date, heureDebut + "h00", heureFin + "h00", classe, salle);
+		Cours cours = new Cours(matiere.getNom(), prof, matiere.getCouleur(), date, heureDebut + "h00",
+				heureFin + "h00", classe, salle);
 		if (!this.getMain().getCours().isEmpty()) {
 			this.getMain().edtAreaController.viderCours();
 		}
@@ -136,14 +142,13 @@ public class CreationCoursController {
 			stmt.execute(
 					"INSERT INTO \"COURS\" (salle, horaire_debut, horaire_fin, date, \"Matiere_matiereID\", \"Prof_profID\") VALUES ('"
 							+ cours.getSalle() + "', '" + cours.getHeureDebut() + "', '" + cours.getHeureFin() + "', '"
-							+ cours.getDate() + "',1,1)");
+							+ cours.getDate() + "', " + matiere.getId() + ", " + prof.getId() + ")");
 			stmt.close();
 			con.close();
 		} catch (Exception e) {
 			System.out.println("Problème de connexion à la BDD");
 			System.out.println(e.getMessage());
 		}
-
 		this.stage.close();
 	}
 

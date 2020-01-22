@@ -8,6 +8,7 @@ import fr.eseo.i2.ld.edt.controleur.CreationCoursController;
 import fr.eseo.i2.ld.edt.controleur.EDTAreaController;
 import fr.eseo.i2.ld.edt.controleur.RootLayoutController;
 import fr.eseo.i2.ld.edt.modele.Cours;
+import javafx.animation.PauseTransition;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -15,6 +16,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 public class Main extends Application {
 
@@ -35,7 +37,7 @@ public class Main extends Application {
 	public List<Cours> getCours() {
 		return this.listeCours;
 	}
-	
+
 	public static void main(String[] args) {
 		launch();
 	}
@@ -50,6 +52,12 @@ public class Main extends Application {
 
 		initRootLayout();
 		initEDTArea();
+
+		PauseTransition wait = new PauseTransition(Duration.seconds(2));
+		wait.setOnFinished((e) -> {
+			this.edtAreaController.afficherCours();
+		});
+		wait.play();
 	}
 
 	public void initRootLayout() {
@@ -68,7 +76,8 @@ public class Main extends Application {
 			this.premierStage.show();
 
 		} catch (IOException e) {
-			System.out.println("Zut");
+			System.out.println("Erreur sur la fenêtre principale");
+			System.out.println(e.getCause());
 		}
 	}
 
@@ -80,19 +89,22 @@ public class Main extends Application {
 			// Give the controller access to the main class
 			this.edtAreaController = loaderEDTArea.getController();
 			this.edtAreaController.setMain(this);
+			this.edtAreaController.init();
 
 			// Set the draw area into the center of root layout.
 			rootLayout.setCenter(drawArea);
 
 		} catch (IOException e) {
-			System.out.println("Zut");
+			System.out.println("Erreur sur la zone d'emploi du temps");
+			System.out.println(e.getCause());
 		}
 	}
-	
+
 	public void initCreationCours() {
 		try {
 			// Load the fxml file and create a new stage for the popup dialog.
-			FXMLLoader loaderInformation = new FXMLLoader(getClass().getResource(cheminVersVues + "CreationCours.fxml"));
+			FXMLLoader loaderInformation = new FXMLLoader(
+					getClass().getResource(cheminVersVues + "CreationCours.fxml"));
 			AnchorPane page = (AnchorPane) loaderInformation.load();
 
 			// Create the dialog Stage.
@@ -113,7 +125,8 @@ public class Main extends Application {
 			// Show the dialog and wait until the user closes it
 			dialogStageInfo.showAndWait();
 		} catch (IOException e) {
-			System.out.println("Zut");
+			System.out.println("Erreur sur la fenêtre d'ajout d'un cours");
+			System.out.println(e.getCause());
 		}
 	}
 }
