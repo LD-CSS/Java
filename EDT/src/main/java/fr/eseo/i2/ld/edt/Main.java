@@ -6,6 +6,7 @@ import java.util.List;
 
 import fr.eseo.i2.ld.edt.controleur.CreationCoursController;
 import fr.eseo.i2.ld.edt.controleur.EDTAreaController;
+import fr.eseo.i2.ld.edt.controleur.IdentificationProfController;
 import fr.eseo.i2.ld.edt.controleur.RootLayoutController;
 import fr.eseo.i2.ld.edt.modele.Classe;
 import fr.eseo.i2.ld.edt.modele.Cours;
@@ -35,16 +36,17 @@ public class Main extends Application {
 	public RootLayoutController rootLayoutController;
 	public EDTAreaController edtAreaController;
 	public CreationCoursController creationCoursController;
+	public IdentificationProfController identificationProfController;
 
 	// Accesseurs
 	public List<Cours> getCours() {
 		return this.listeCours;
 	}
-	
+
 	public Classe getClasseActuelle() {
 		return this.classeActuelle;
 	}
-	
+
 	public void setClasseActuelle(Classe classe) {
 		this.classeActuelle = classe;
 	}
@@ -69,7 +71,7 @@ public class Main extends Application {
 			this.setClasseActuelle(this.rootLayoutController.getClasse());
 		});
 		wait.play();
-		
+
 		wait = new PauseTransition(Duration.seconds(1));
 		wait.setOnFinished((e) -> {
 			this.edtAreaController.afficherCours();
@@ -126,7 +128,7 @@ public class Main extends Application {
 
 			// Create the dialog Stage.
 			Stage dialogStageInfo = new Stage();
-			dialogStageInfo.setTitle("Information");
+			dialogStageInfo.setTitle("Création d'un cours");
 			dialogStageInfo.initModality(Modality.WINDOW_MODAL);
 			dialogStageInfo.initOwner(this.premierStage);
 
@@ -144,6 +146,37 @@ public class Main extends Application {
 		} catch (IOException e) {
 			System.out.println("Erreur sur la fenêtre d'ajout d'un cours");
 			System.out.println(e.getCause());
+		}
+	}
+
+	public boolean initIdentification() {
+		try {
+			// Load the fxml file and create a new stage for the popup dialog.
+			FXMLLoader loaderInformation = new FXMLLoader(
+					getClass().getResource(cheminVersVues + "IdentificationProf.fxml"));
+			AnchorPane page = (AnchorPane) loaderInformation.load();
+
+			// Create the dialog Stage.
+			Stage dialogStageInfo = new Stage();
+			dialogStageInfo.setTitle("Authentification");
+			dialogStageInfo.initModality(Modality.WINDOW_MODAL);
+			dialogStageInfo.initOwner(this.premierStage);
+
+			Scene sceneInfo = new Scene(page);
+			dialogStageInfo.setScene(sceneInfo);
+
+			// Give the controller access to the main class
+			this.identificationProfController = loaderInformation.getController();
+			this.identificationProfController.setMain(this);
+			this.identificationProfController.setStage(dialogStageInfo);
+
+			// Show the dialog and wait until the user closes it
+			dialogStageInfo.showAndWait();
+			return this.identificationProfController.isOk();
+		} catch (IOException e) {
+			System.out.println("Erreur sur la fenêtre d'authentification");
+			System.out.println(e.getCause());
+			return false;
 		}
 	}
 }

@@ -123,34 +123,43 @@ public class CreationCoursController {
 		int heureDebut = (int) this.choixHeureDebut.getValue();
 		int heureFin = (int) this.choixHeureFin.getValue();
 		String salle = this.choixSalle.getText();
-		Cours cours = new Cours(matiere.getNom(), prof, matiere.getCouleur(), date, heureDebut + "h00",
-				heureFin + "h00", classe, salle);
-		if (!this.getMain().getCours().isEmpty()) {
-			this.getMain().edtAreaController.viderCours();
-		}
-		this.getMain().getCours().add(cours);
-		this.getMain().edtAreaController.afficherCours();
+		if (prof != null && classe != null && matiere != null && date != null && heureDebut != 0 && heureFin != 0
+				&& !salle.isEmpty()) {
+			if (this.getMain().initIdentification()) {
+				Cours cours = new Cours(matiere.getNom(), prof, matiere.getCouleur(), date, heureDebut + "h00",
+						heureFin + "h00", classe, salle);
+				if (!this.getMain().getCours().isEmpty()) {
+					this.getMain().edtAreaController.viderCours();
+				}
+				this.getMain().getCours().add(cours);
+				this.getMain().edtAreaController.afficherCours();
 
-		try {
-			// Connexion bdd
-			Class.forName("org.postgresql.Driver");
-			Connection con = DriverManager.getConnection("jdbc:postgresql://192.168.4.221:5432/EDT", "Louis",
-					"network");
-			// Requête SQL
-			Statement stmt = con.createStatement();
-			// Requête prof
-			stmt.execute(
-					"INSERT INTO \"COURS\" (salle, horaire_debut, horaire_fin, date, classe, \"Matiere_matiereID\", \"Prof_profID\") VALUES ('"
-							+ cours.getSalle() + "', '" + cours.getHeureDebut() + "', '" + cours.getHeureFin() + "', '"
-							+ cours.getDate() + "', '" + cours.getClasse() + "', " + matiere.getId() + ", "
-							+ prof.getId() + ")");
-			stmt.close();
-			con.close();
-		} catch (Exception e) {
-			System.out.println("Problème de connexion à la BDD");
-			System.out.println(e.getMessage());
+				try {
+					// Connexion bdd
+					Class.forName("org.postgresql.Driver");
+					Connection con = DriverManager.getConnection("jdbc:postgresql://192.168.4.221:5432/EDT", "Louis",
+							"network");
+					// Requête SQL
+					Statement stmt = con.createStatement();
+
+					// Requête prof
+
+					// Requête cours
+					stmt.execute(
+							"INSERT INTO \"COURS\" (salle, horaire_debut, horaire_fin, date, classe, \"Matiere_matiereID\", \"Prof_profID\") VALUES ('"
+									+ cours.getSalle() + "', '" + cours.getHeureDebut() + "', '" + cours.getHeureFin()
+									+ "', '" + cours.getDate() + "', '" + cours.getClasse() + "', " + matiere.getId()
+									+ ", " + prof.getId() + ")");
+					stmt.close();
+					con.close();
+				} catch (Exception e) {
+					System.out.println("Problème de connexion à la BDD");
+					System.out.println(e.getMessage());
+				}
+				this.stage.close();
+				System.out.println("Cours ajouté");
+			}
 		}
-		this.stage.close();
 	}
 
 	@FXML
