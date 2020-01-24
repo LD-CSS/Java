@@ -7,3 +7,7 @@ Pour pouvoir lancer l'application il faut faire comme ça la première fois :
 6 - Onglet "Arguments"
 7 - Dans la zone de texte "VM Arguments" écrire ça (faut modifier le chemin) :
 	-ea --module-path cheminVersLeDossierJavaFX\lib --add-modules=javafx.controls,javafx.fxml,javafx.swing,javafx.graphics,javafx.base
+	
+	
+Il faut installer JavaFX version 11.0.2
+Le projet utilise gralde, un clic droit sur build.gradle > Gradle > Refresh Gradle Project installera les librairies.
