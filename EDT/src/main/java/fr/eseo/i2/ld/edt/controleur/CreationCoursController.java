@@ -89,7 +89,7 @@ public class CreationCoursController {
 			// Requête matières
 			rs = stmt.executeQuery("SELECT (nom,couleur,\"MatiereID\") FROM \"MATIERE\"");
 			while (rs.next()) {
-				String texte = rs.getString(1).replace("(", "").replace(")", "");
+				String texte = rs.getString(1).replace("(", "").replace(")", "").replace("\"", "");
 				String nom = texte.split(",")[0];
 				Color couleur = Color.valueOf(texte.split(",")[1]);
 				int id = Integer.valueOf(texte.split(",")[2]);

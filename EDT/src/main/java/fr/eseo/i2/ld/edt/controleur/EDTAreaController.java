@@ -63,7 +63,7 @@ public class EDTAreaController {
 			// Requête matiere
 			rs = stmt.executeQuery("SELECT (nom, couleur, \"MatiereID\") FROM \"MATIERE\"");
 			while (rs.next()) {
-				String texte[] = rs.getString(1).replace("(", "").replace(")", "").split(",");
+				String texte[] = rs.getString(1).replace("(", "").replace(")", "").replace("\"", "").split(",");
 				mapMatiere.put(Integer.valueOf(texte[2]),
 						new Matiere(texte[0], Color.valueOf(texte[1]), Integer.valueOf(texte[2])));
 			}
